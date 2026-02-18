@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnFlow - Your Learning Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // Redirect to sign-in if neither logged in nor guest
+        (function () {
+            try {
+                const loggedIn = localStorage.getItem('lf_logged_in') === 'true';
+                const guest = localStorage.getItem('lf_guest') === 'true';
+                if (!loggedIn && !guest) {
+                    window.location.href = 'signin.html';
+                }
+            } catch (err) {
+                // If storage is unavailable, always go to sign-in
+                window.location.href = 'signin.html';
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">LearnFlow</div>
+            
+            <nav class="nav-section">
+                <div class="nav-title">Menu</div>
+                <a href="#" class="nav-item active">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                    </svg>
+                    Home
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+                    </svg>
+                    My Learning
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                    </svg>
+                    Browse
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                    </svg>
+                    Favorites
+                </a>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-title">Library</div>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
+                    </svg>
+                    In Progress
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    Completed
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"/>
+                    </svg>
+                    Saved
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Navigation -->
+            <header class="top-nav">
+                <div class="search-container">
+                    <svg class="search-icon" width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                    </svg>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search for courses, instructors, topics...">
+                    <button class="search-clear" id="searchClear">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+
+                    <!-- Search Suggestions -->
+                    <div class="search-suggestions" id="searchSuggestions">
+                        <div class="suggestion-category">Recent Searches</div>
+                        <div class="suggestion-item" data-search="JavaScript">
+                            <div class="suggestion-icon">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div class="suggestion-info">
+                                <div class="suggestion-title">JavaScript</div>
+                                <div class="suggestion-subtitle">Recent search</div>
+                            </div>
+                        </div>
+                        <div class="suggestion-item" data-search="Python">
+                            <div class="suggestion-icon">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div class="suggestion-info">
+                                <div class="suggestion-title">Python</div>
+                                <div class="suggestion-subtitle">Recent search</div>
+                            </div>
+                        </div>
+                        <div class="suggestion-category">Popular Courses</div>
+                        <div class="suggestion-item" data-search="Complete JavaScript Masterclass">
+                            <div class="suggestion-icon">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+                                </svg>
+                            </div>
+                            <div class="suggestion-info">
+                                <div class="suggestion-title">Complete JavaScript Masterclass</div>
+                                <div class="suggestion-subtitle">by code by harry </div>
+                            </div>
+                        </div>
+                        <div class="suggestion-item" data-search="UI/UX Design Fundamentals">
+                            <div class="suggestion-icon">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+                                </svg>
+                            </div>
+                            <div class="suggestion-info">
+                                <div class="suggestion-title">UI/UX Design Fundamentals</div>
+                                <div class="suggestion-subtitle">by Emma Williams</div>
+                            </div>
+                        </div>
+                        <div class="suggestion-category">Instructors</div>
+                        <div class="suggestion-item" data-search="Sarah Johnson">
+                            <div class="suggestion-icon">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div class="suggestion-info">
+                                <div class="suggestion-title">Sarah Johnson</div>
+                                <div class="suggestion-subtitle">Web Development Instructor</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="user-section">
+                    <button class="notification-btn" id="notificationBtn">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                        </svg>
+                        <span class="notification-badge"></span>
+                    </button>
+
+                    <!-- Notification Dropdown -->
+                    <div class="notification-dropdown" id="notificationDropdown">
+                        <div class="notification-header">
+                            <div class="notification-title">Notifications</div>
+                            <button class="mark-read-btn">Mark all as read</button>
+                        </div>
+                        <div class="notification-item unread">
+                            <div class="notification-icon">
+                                <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+                                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-text">You completed <strong>JavaScript Masterclass</strong> - Lesson 5</div>
+                                <div class="notification-time">2 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="notification-item unread">
+                            <div class="notification-icon">
+                                <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-text">New course available: <strong>Advanced React Patterns</strong></div>
+                                <div class="notification-time">1 hour ago</div>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-icon">
+                                <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-text">Your certificate for <strong>Python for Data Analysis</strong> is ready</div>
+                                <div class="notification-time">3 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-icon">
+                                <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-text">Sarah Johnson liked your review</div>
+                                <div class="notification-time">Yesterday</div>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-icon">
+                                <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-text">Reminder: Live session starts in 30 minutes</div>
+                                <div class="notification-time">2 days ago</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="user-profile" id="userProfile">
+                        <div class="user-avatar">JD</div>
+                        <span class="user-name">John Doe</span>
+                    </div>
+
+                    <!-- User Dropdown -->
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="user-dropdown-header">
+                            <div class="user-dropdown-avatar">JD</div>
+                            <div class="user-dropdown-name">John Doe</div>
+                            <div class="user-dropdown-email">john.doe@example.com</div>
+                        </div>
+                        <div class="user-dropdown-menu">
+                            <a href="#" class="user-dropdown-item">
+                                <svg fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                </svg>
+                                My Profile
+                            </a>
+                            <a href="#" class="user-dropdown-item">
+                                <svg fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                                </svg>
+                                Edit Profile
+                            </a>
+                            <a href="#" class="user-dropdown-item">
+                                <svg fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                                </svg>
+                                Settings
+                            </a>
+                            <a href="#" class="user-dropdown-item">
+                                <svg fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                                </svg>
+                                Help & Support
+                            </a>
+                            <div class="user-dropdown-divider"></div>
+                            <a href="#" class="user-dropdown-item danger">
+                                <svg fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/>
+                                </svg>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Hero Section -->
+                <section class="hero-section">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Continue Learning</h1>
+                        <p class="hero-subtitle">Pick up where you left off and achieve your goals</p>
+                        <button class="hero-btn">Resume Course</button>
+                    </div>
+                </section>
+
+                <!-- Categories -->
+                <div class="categories">
+                    <button class="category-chip active">All Courses</button>
+                    <button class="category-chip">Web Development</button>
+                    <button class="category-chip">Data Science</button>
+                    <button class="category-chip">Design</button>
+                    <button class="category-chip">Business</button>
+                    <button class="category-chip">Marketing</button>
+                    <button class="category-chip">Photography</button>
+                    <button class="category-chip">Music</button>
+                </div>
+
+                <!-- Recommended Courses -->
+                <section>
+                    <div class="section-header">
+                        <h2 class="section-title">Recommended for You</h2>
+                        <a href="#" class="view-all">View All →</a>
+                    </div>
+                    <div class="course-grid">
+                        <div class="course-card">
+                            <div class="course-thumbnail">
+                                <div class="play-overlay">
+                                    <div class="play-icon"></div>
+                                </div>
+                            </div>
+                            <div class="course-info">
+                                <div class="course-category">Web Development</div>
+                                <h3 class="course-title">Complete JavaScript Masterclass</h3>
+                                <p class="course-instructor">by Sarah Johnson</p>
+                                <div class="course-footer">
+                                    <div class="course-stats">
+                                        <span class="stat-item">
+                                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            12.5K
+                                        </span>
+                                        <span class="stat-item">⭐ 4.8</span>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 65%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-thumbnail">
+                                <div class="play-overlay">
+                                    <div class="play-icon"></div>
+                                </div>
+                            </div>
+                            <div class="course-info">
+                                <div class="course-category">Data Science</div>
+                                <h3 class="course-title">Python for Data Analysis</h3>
+                                <p class="course-instructor">by Michael Chen</p>
+                                <div class="course-footer">
+                                    <div class="course-stats">
+                                        <span class="stat-item">
+                                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            8.2K
+                                        </span>
+                                        <span class="stat-item">⭐ 4.9</span>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 30%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-thumbnail">
+                                <div class="play-overlay">
+                                    <div class="play-icon"></div>
+                                </div>
+                            </div>
+                            <div class="course-info">
+                                <div class="course-category">Design</div>
+                                <h3 class="course-title">UI/UX Design Fundamentals</h3>
+                                <p class="course-instructor">by Emma Williams</p>
+                                <div class="course-footer">
+                                    <div class="course-stats">
+                                        <span class="stat-item">
+                                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            15.1K
+                                        </span>
+                                        <span class="stat-item">⭐ 4.7</span>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-thumbnail">
+                                <div class="play-overlay">
+                                    <div class="play-icon"></div>
+                                </div>
+                            </div>
+                            <div class="course-info">
+                                <div class="course-category">Business</div>
+                                <h3 class="course-title">Digital Marketing Strategy</h3>
+                                <p class="course-instructor">by David Miller</p>
+                                <div class="course-footer">
+                                    <div class="course-stats">
+                                        <span class="stat-item">
+                                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            9.8K
+                                        </span>
+                                        <span class="stat-item">⭐ 4.6</span>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 45%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-thumbnail">
+                                <div class="play-overlay">
+                                    <div class="play-icon"></div>
+                                </div>
+                            </div>
+                            <div class="course-info">
+                                <div class="course-category">Photography</div>
+                                <h3 class="course-title">Professional Photography Basics</h3>
+                                <p class="course-instructor">by Lisa Anderson</p>
+                                <div class="course-footer">
+                                    <div class="course-stats">
+                                        <span class="stat-item">
+                                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            6.4K
+                                        </span>
+                                        <span class="stat-item">⭐ 4.9</span>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-thumbnail">
+                                <div class="play-overlay">
+                                    <div class="play-icon"></div>
+                                </div>
+                            </div>
+                            <div class="course-info">
+                                <div class="course-category">Web Development</div>
+                                <h3 class="course-title">React & Redux Complete Guide</h3>
+                                <p class="course-instructor">by James Wilson</p>
+                                <div class="course-footer">
+                                    <div class="course-stats">
+                                        <span class="stat-item">
+                                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            11.2K
+                                        </span>
+                                        <span class="stat-item">⭐ 4.8</span>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 20%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Trending Courses -->
+                <section>
+                    <div class="section-header">
+                        <h2 class="section-title">Trending This Week</h2>
+                        <a href="#" class="view-all">View All →</a>
+                    </div>
+                    <div class="course-grid">
+                        <div class="course-card">
+                            <div class="course-thumbnail">
+                                <div class="play-overlay">
+                                    <div class="play-icon"></div>
+                                </div>
+                            </div>
+                            <div class="course-info">
+                                <div class="course-category">AI & Machine Learning</div>
+                                <h3 class="course-title">Introduction to Machine Learning</h3>
+                                <p class="course-instructor">by Alex Turner</p>
+                                <div class="course-footer">
+                                    <div class="course-stats">
+                                        <span class="stat-item">
+                                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            18.3K
+                                        </span>
+                                        <span class="stat-item">⭐ 4.9</span>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-thumbnail">
+                                <div class="play-overlay">
+                                    <div class="play-icon"></div>
+                                </div>
+                            </div>
+                            <div class="course-info">
+                                <div class="course-category">Mobile Development</div>
+                                <h3 class="course-title">Flutter App Development</h3>
+                                <p class="course-instructor">by Rachel Kim</p>
+                                <div class="course-footer">
+                                    <div class="course-stats">
+                                        <span class="stat-item">
+                                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            7.9K
+                                        </span>
+                                        <span class="stat-item">⭐ 4.7</span>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="course-card">
+                            <div class="course-thumbnail">
+                                <div class="play-overlay">
+                                    <div class="play-icon"></div>
+                                </div>
+                            </div>
+                            <div class="course-info">
+                                <div class="course-category">Cloud Computing</div>
+                                <h3 class="course-title">AWS Solutions Architect</h3>
+                                <p class="course-instructor">by Tom Harris</p>
+                                <div class="course-footer">
+                                    <div class="course-stats">
+                                        <span class="stat-item">
+                                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            13.5K
+                                        </span>
+                                        <span class="stat-item">⭐ 4.8</span>
+                                    </div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Bottom Player -->
+            <div class="bottom-player">
+                <div class="current-course">
+                    <div class="current-thumbnail"></div>
+                    <div class="current-info">
+                        <div class="current-title">Complete JavaScript Masterclass</div>
+                        <div class="current-instructor">by Sarah Johnson</div>
+                    </div>
+                </div>
+
+                <div class="player-controls">
+                    <div class="control-buttons">
+                        <button class="control-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z"/>
+                            </svg>
+                        </button>
+                        <button class="control-btn play-pause-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <button class="control-btn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.798l-5.445-3.63z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="timeline">
+                        <span class="time">12:45</span>
+                        <div class="progress-track">
+                            <div class="progress-current" style="width: 35%">
+                                <div class="progress-thumb"></div>
+                            </div>
+                        </div>
+                        <span class="time">35:20</span>
+                    </div>
+                </div>
+
+                <div class="volume-control">
+                    <button class="control-btn">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                    <div class="volume-slider">
+                        <div class="volume-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Course Video Modal -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal-panel">
+            <div class="video-modal-header">
+                <div>
+                    <div class="video-modal-label">Now Playing</div>
+                    <h3 class="video-modal-title" id="videoTitle">Course title</h3>
+                    <p class="video-modal-subtitle" id="videoSubtitle">Category • Instructor</p>
+                </div>
+                <button class="video-modal-close" id="videoCloseBtn" aria-label="Close video">
+                    ×
+                </button>
+            </div>
+            <div class="video-modal-body">
+                <div class="video-aspect">
+                    <video id="courseVideo" controls preload="metadata">
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <iframe
+                        id="courseYoutube"
+                        src=""
+                        title="Course video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
